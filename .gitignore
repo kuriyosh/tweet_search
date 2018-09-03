@@ -1,0 +1,12 @@
+# Emacs
+*~
+\#*
+
+# OSX
+.DS_Store
+
+# config
+config.py
+
+# python
+*.pyc
