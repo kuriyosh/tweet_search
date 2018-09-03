@@ -5,13 +5,16 @@
 # date : 2018-09-03
 
 # IMPORT
-import json, config
+import json
+import config
 import requests
 from requests_oauthlib import OAuth1Session
 from dateutil.parser import parse
 from datetime import datetime
+from datetime import timedelta
 from time import sleep
 import argparse
+from pytz import timezone
 
 twitter = OAuth1Session(config.CONSUMER_KEY,
                         config.CONSUMER_SECRET,
@@ -59,19 +62,20 @@ if __name__ == '__main__' :
 
     args = parser.parse_args()
     query = args.query
-    now_time = datetime.now()
+    now_time = datetime.now(timezone('UTC'))
 
     while(1):
+        print(now_time)
         tweets = search_tweet(query)
         if tweets != -1:
             for tw in tweets:
-                dt = parse(tw['created_at'],ignoretz=True)
+                dt = parse(tw['created_at'])
+                print(tw['text'])
                 if dt > now_time:
                     line_notify(tw['text'])
         else:
             line_notify('error')
             exit(-1)
             
-        now_time = datetime.now()
-        sleep(360)
-        
+        now_time = datetime.now(timezone('UTC'))
+        sleep(300)
